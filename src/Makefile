@@ -8,12 +8,6 @@ CXX ?= c++
 CC ?= cc
 INSTALL_DIR ?= /usr/local/bin
 
-CFLAGS_Pissb	= -Wall -g -O2 -Wno-unused-variable
-LDFLAGS_Pissb	= $(LDFLAGS) -lsndfile -lliquid
-
-../pissb: ssbgen/test_ssb.c ssbgen/ssb_gen.c ssbgen/liquid_ssb.c 
-	$(CC) $(CFLAGS_Pissb) -o ../pissb ssbgen/liquid_ssb.c $(LDFLAGS_Pissb)
-
 ../pisstv : sstv/pisstv.cpp 
 	$(CXX) $(CXXFLAGS) -o ../pisstv sstv/pisstv.cpp  $(LDFLAGS)
 	
@@ -79,20 +73,20 @@ LDFLAGS_Pissb	= $(LDFLAGS) -lsndfile -lliquid
 	$(CXX) $(CXXFLAGS) -Wno-write-strings -o ../sendook ook/sendook.cpp ook/optparse.c $(LDFLAGS)
 
 CFLAGS_Pifm	= -Wall -g -O2 -Wno-unused-variable
-LDFLAGS_Pifm	= $(LDFLAGS) -lsndfile
+LDFLAGS_Pifm	= $(LDFLAGS) -lsndfile -lm
 ../pifm : ../fm/pifm.c
 	$(CC) $(CFLAGS_Pifm) -o ../pifm ../fm/pifm.c  $(LDFLAGS_Pifm)
 
 CFLAGS_Piam	= -Wall -g -O2 -Wno-unused-variable
-LDFLAGS_Piam	= $(LDFLAGS_Pifm)
+LDFLAGS_Piam	= $(-lsndfile -lm)
 ../piam : ../am/piam.c
 	$(CC) $(CFLAGS_Piam) -o ../piam ../am/piam.c  $(LDFLAGS_Piam)
 
 CFLAGS_Pidcf77	= -Wall -g -O2 -Wno-unused-variable
 ../pidcf77 : ../dcf77/pidcf77.c
-	$(CC) $(CFLAGS_Piam) -o ../pidcf77 ../dcf77/pidcf77.c  $(LDFLAGS)
+	$(CC) $(CFLAGS_Piam) -o ../pidcf77 ../dcf77/pidcf77.c  $(LDFLAGS_Piam)
 clean:
-	rm -f  ../dvbrf ../sendiq ../pissb ../pisstv ../pifsq ../pifm ../piam ../pidcf77 ../pichirp ../tune ../freedv ../piopera ../spectrumpaint ../pocsag ../pifmrds ../rpitx ../sendook ../foxhunt ../morse ../pift8
+	rm -f  ../dvbrf ../sendiq ../pisstv ../pifsq ../pifm ../piam ../pidcf77 ../pichirp ../tune ../freedv ../piopera ../spectrumpaint ../pocsag ../pifmrds ../rpitx ../sendook ../foxhunt ../morse ../pift8
 
 install: all
 	install -m 0755 ../pisstv $(INSTALL_DIR)
@@ -110,7 +104,6 @@ install: all
 	install -m 0755 ../dvbrf $(INSTALL_DIR)
 	install -m 0755 ../pifmrds $(INSTALL_DIR)
 	install -m 0755 ../pocsag $(INSTALL_DIR)
-	install -m 0755 ../pissb $(INSTALL_DIR)
 	install -m 0755 ../piam $(INSTALL_DIR)
 	install -m 0755 ../pidcf77 $(INSTALL_DIR)
 	install -m 0755 ../spectrumpaint $(INSTALL_DIR)
